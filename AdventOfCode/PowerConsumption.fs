@@ -51,6 +51,29 @@ let gamma (reports : Bit List List) =
     |> List.fold calculateAll (initAll reports )
     |> chooseAll
     
-    //[Zero;Zero;One;Zero;Zero]
-    
+let gammaFromRaw (reports : string list) =
+    reports
+    |> List.map decodeBits
+    |> gamma
 
+let epsilon gamma = 
+    let flip bit = match bit with | One -> Zero | Zero -> One
+    gamma
+    |> List.map flip
+
+let bitValue bit index =
+    if bit = Zero then 0
+    else
+        pown 2 index
+
+let toDecimal gamma =
+    gamma
+    |> List.rev
+    |> List.mapi (fun i x -> bitValue x i )
+    |> List.sum
+
+let getTotal reports =
+    let gamma = gammaFromRaw reports 
+    let epsilon = epsilon gamma 
+    (toDecimal gamma) * (toDecimal epsilon)
+    

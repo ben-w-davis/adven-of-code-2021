@@ -42,7 +42,6 @@ let ``Gamma rate of first bit``() =
 
     Assert.Equal(One, result)
 
-
 let compareBitList (expected : Bit List) (result : Bit list) =
     expected
     |> List.zip result
@@ -52,9 +51,8 @@ let compareBitList (expected : Bit List) (result : Bit list) =
 let ``Convert string bit list to Bits``() =
     let sample = "00100"
     let result = decodeBits sample
-    let expected = [Zero;Zero;One;Zero;Zero]
 
-    compareBitList expected result
+    compareBitList [Zero;Zero;One;Zero;Zero] result
 
 [<Fact>]
 let ``Get gamma for a single report list``() =
@@ -64,7 +62,31 @@ let ``Get gamma for a single report list``() =
         ]
 
     let result = gamma sample
-    let expected = [Zero;Zero;One;Zero;Zero]
 
-    compareBitList expected result
+    compareBitList [Zero;Zero;One;Zero;Zero] result
 
+[<Fact>]
+let ``Get gamma from sample list``() =
+    let result = gammaFromRaw sampleInput
+
+    compareBitList [One;Zero;One;One;Zero] result
+
+[<Fact>]
+let ``Get epsilon from gamma``() =
+    let gamma = [One;Zero;One;One;Zero]
+    let result = epsilon gamma
+
+    compareBitList [Zero;One;Zero;Zero;One] result
+
+[<Fact>]
+let ``Get decimal value``() =
+    let gamma = [One;Zero;One;One;Zero]
+    let result = toDecimal gamma
+
+    Assert.Equal(22, result)
+
+[<Fact>]
+let ``Get power consumption total``() =
+    let result = getTotal sampleInput
+
+    Assert.Equal(198, result)
