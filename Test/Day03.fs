@@ -45,9 +45,8 @@ let ``Gamma rate of first bit``() =
 [<Fact>]
 let ``Convert string bit list to Bits``() =
     let sample = "00100"
-    let result : Bit list = decodeBits sample
-
-    let expected : Bit list = [Zero;Zero;One;Zero;Zero]
+    let result = decodeBits sample
+    let expected = [Zero;Zero;One;Zero;Zero]
 
     expected
     |> List.zip result
