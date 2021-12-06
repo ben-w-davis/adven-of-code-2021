@@ -167,3 +167,12 @@ let ``Check for a win by column``() =
     let result = doesBoardWin winningBoard
 
     Assert.True result
+
+[<Fact>]
+let ``Run sample input game``() =
+    let result = run sampleInput
+
+    Assert.Equal(24, result.WinningNumber)
+    Assert.Equal(188, result.UnMarked)
+    Assert.Equal(4512, result.Score)
+

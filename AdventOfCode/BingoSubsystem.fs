@@ -83,6 +83,8 @@ let markBoard board numbers =
     |> List.map (mark numbers)
     |> toBoard
 
+let markOne number board = markBoard board [number]
+
 let checkByRow marked =
     marked 
     |> List.groupBy (fun x -> x.Row)
@@ -101,4 +103,26 @@ let doesBoardWin board =
     else
         (checkByRow marked) || (checkByColumn marked)
 
-    
+type GameResult = {
+    WinningNumber : int
+    UnMarked : int
+    Score : int
+}
+
+let rec runRec gameState =
+    match gameState.Moves with
+    | [] -> { WinningNumber = -1; UnMarked = 0; Score = -1 }
+    | next::remaining ->
+        let boards = gameState.Boards |> List.map (markOne next)
+        if boards |> List.exists doesBoardWin then
+            let winner = boards |> List.filter doesBoardWin |> List.head
+            let unmarked = winner.Spaces |> List.filter (fun x -> x.Marked |> not) |> List.sumBy (fun x -> x.Value)
+            { WinningNumber = next; UnMarked = unmarked; Score = next * unmarked }
+        else
+            runRec { gameState with Boards = boards; Moves = remaining }
+
+let run input =
+    let gameState = parser input
+
+    runRec gameState
+
