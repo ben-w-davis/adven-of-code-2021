@@ -97,13 +97,25 @@ let rec searchRec choice index (searchList : Bit[] List) =
         search choice searchList index
         |> searchRec choice (index + 1)
 
+let keepOne (result : Bit[] list) =
+    match List.tryHead result with
+    | Some x -> x |> Array.toList
+    | None -> []
+    
 let searchForOxygenRating reports =
     reports 
     |> List.map (decodeBits >> List.toArray)
     |> searchRec chooseForOxygen 0
+    |> keepOne
 
 let searchForCO2Rating reports =
     reports 
     |> List.map (decodeBits >> List.toArray)
     |> searchRec chooseForCarbonDioxide 0
+    |> keepOne
 
+let getLifeSupportRating reports =
+    let oxygen = searchForOxygenRating reports |> toDecimal
+    let co2 = searchForCO2Rating reports |> toDecimal
+
+    oxygen * co2

@@ -1073,7 +1073,6 @@ let ``Get gamma for a single report list``() =
 [<Fact>]
 let ``Get gamma from sample list``() =
     let result = gammaFromRaw sampleInput
-
     compareBitList [One;Zero;One;One;Zero] result
 
 [<Fact>]
@@ -1093,25 +1092,24 @@ let ``Get decimal value``() =
 [<Fact>]
 let ``Get power consumption total``() =
     let result = getTotal sampleInput
-
     Assert.Equal(198, result)
 
 [<Fact>]
 let ``Get power consumption from puzzle input``() =
     let result = getTotal puzzleInput
-
     Assert.Equal(3687446, result)
 
 [<Fact>]
 let ``Get Oxygen rating info``() =
     let result = searchForOxygenRating sampleInput
-
-    Assert.Equal(1, result |> List.length)
-    Assert.Equal(23, result |> List.head |> Array.toList |> toDecimal)
+    Assert.Equal(23, result |> toDecimal)
 
 [<Fact>]
 let ``Get CO2 scrubber rating``() =
     let result = searchForCO2Rating sampleInput
+    Assert.Equal(10, result |> toDecimal)
 
-    Assert.Equal(1, result |> List.length)
-    Assert.Equal(10, result |> List.head |> Array.toList |> toDecimal)
+[<Fact>]
+let ``Get life support rating from sample input``() =
+    let result = getLifeSupportRating sampleInput
+    Assert.Equal(230, result)
