@@ -1113,3 +1113,8 @@ let ``Get CO2 scrubber rating``() =
 let ``Get life support rating from sample input``() =
     let result = getLifeSupportRating sampleInput
     Assert.Equal(230, result)
+
+[<Fact>]
+let ``Get life support rating from puzzle input``() =
+    let result = getLifeSupportRating puzzleInput
+    Assert.Equal(4_406_844, result)
