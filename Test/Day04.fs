@@ -89,8 +89,11 @@ let ``Apply numbers to a single board``() =
 
     let result = markBoard board numbers
     let expected = 
-        [|
+        [
+            initSpace 1 (0,0)
+            initSpace 2 (0,1)
             { initSpace 3 (0,2) with Marked = true }
+            initSpace 4 (0,3)
             { initSpace 5 (0,4) with Marked = true }
-        |]
-    Assert.Equal(expected, result.Spaces |> List.filter (fun x -> x.Marked))
+        ] |> toBoard
+    Assert.Equal(expected, result)
