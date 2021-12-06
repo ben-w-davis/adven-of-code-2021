@@ -28,7 +28,8 @@ let sampleInput =
 
 [<Fact>]
 let ``Parse moves list``()=
-    let result = getMoves sampleInput
+    let line = "7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1"
+    let result = getMoves line
 
     Assert.Equal(7, result |> Array.head)
     Assert.Equal(27, result |> Array.length)
@@ -36,7 +37,7 @@ let ``Parse moves list``()=
 [<Fact>]
 let ``Build first line of first board``() =
     let line = "22 13 17 11  0"
-    let result = buildSpaceLine line
+    let result = buildSpaceLine line 0
 
     let expected = 
         [
@@ -47,3 +48,20 @@ let ``Build first line of first board``() =
             initSpace 0 (0,4)
         ] |> Array.ofList
     Assert.Equal(expected, result)
+
+[<Fact>]
+let ``Build board recursively``() =
+    let lines = 
+        [
+            "22 13 17 11  0"
+            "8  2 23  4 24"
+            "21  9 14 16  7"
+            "6 10  3 18  5"
+            "1 12 20 15 19"
+        ]
+
+    let result = boardBuilder 0 None [] lines
+
+    Assert.Equal(1, result.Length)
+    let first = result |> List.head
+    Assert.Equal(25, first.Spaces.Length)
