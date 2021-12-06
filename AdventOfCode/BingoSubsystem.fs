@@ -78,11 +78,27 @@ let mark numbers space =
     else
         space
 
-
 let markBoard board numbers =
     board.Spaces
     |> List.map (mark numbers)
     |> toBoard
 
+let checkByRow marked =
+    marked 
+    |> List.groupBy (fun x -> x.Row)
+    |> List.map (fun (_,spaces) -> spaces.Length)
+    |> List.exists (fun x -> x >= 5)
+
+let checkByColumn marked =
+    marked 
+    |> List.groupBy (fun x -> x.Col)
+    |> List.map (fun (_,spaces) -> spaces.Length)
+    |> List.exists (fun x -> x >= 5)
+
+let doesBoardWin board =
+    let marked = board.Spaces |> List.filter (fun x -> x.Marked)
+    if marked.Length < 5 then false
+    else
+        (checkByRow marked) || (checkByColumn marked)
 
     

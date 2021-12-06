@@ -97,3 +97,73 @@ let ``Apply numbers to a single board``() =
             { initSpace 5 (0,4) with Marked = true }
         ] |> toBoard
     Assert.Equal(expected, result)
+
+[<Fact>]
+let ``Check for a win by row``() =
+    let winningBoard = 
+        [
+            { initSpace 1 (0,0) with Marked = true }
+            { initSpace 2 (0,1) with Marked = true }
+            { initSpace 3 (0,2) with Marked = true }
+            { initSpace 4 (0,3) with Marked = true }
+            { initSpace 5 (0,4) with Marked = true }
+            initSpace 6 (1,0)
+            initSpace 7 (1,1)
+            initSpace 8 (1,2)
+            initSpace 9 (1,3)
+            initSpace 10 (1,4)
+            initSpace 11 (2,0)
+            initSpace 12 (2,1)
+            initSpace 13 (2,2)
+            initSpace 14 (2,3)
+            initSpace 15 (2,4)
+            initSpace 16 (3,0)
+            initSpace 17 (3,1)
+            initSpace 18 (3,2)
+            initSpace 19 (3,3)
+            initSpace 20 (3,4)
+            initSpace 21 (4,0)
+            initSpace 22 (4,1)
+            initSpace 23 (4,2)
+            initSpace 24 (4,3)
+            initSpace 25 (4,4)
+        ] |> toBoard
+
+    let result = doesBoardWin winningBoard
+
+    Assert.True result
+
+[<Fact>]
+let ``Check for a win by column``() =
+    let winningBoard = 
+        [
+            { initSpace 1 (0,0) with Marked = true }
+            initSpace 2 (0,1)
+            initSpace 3 (0,2)
+            initSpace 4 (0,3)
+            initSpace 5 (0,4)
+            { initSpace 6 (1,0) with Marked = true }
+            initSpace 7 (1,1)
+            initSpace 8 (1,2)
+            initSpace 9 (1,3)
+            initSpace 10 (1,4)
+            { initSpace 11 (2,0) with Marked = true }
+            initSpace 12 (2,1)
+            initSpace 13 (2,2)
+            initSpace 14 (2,3)
+            initSpace 15 (2,4)
+            { initSpace 16 (3,0) with Marked = true }
+            initSpace 17 (3,1)
+            initSpace 18 (3,2)
+            initSpace 19 (3,3)
+            initSpace 20 (3,4)
+            { initSpace 21 (4,0) with Marked = true }
+            initSpace 22 (4,1)
+            initSpace 23 (4,2)
+            initSpace 24 (4,3)
+            initSpace 25 (4,4)
+        ] |> toBoard
+
+    let result = doesBoardWin winningBoard
+
+    Assert.True result
