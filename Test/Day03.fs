@@ -1101,3 +1101,17 @@ let ``Get power consumption from puzzle input``() =
     let result = getTotal puzzleInput
 
     Assert.Equal(3687446, result)
+
+[<Fact>]
+let ``Get Oxygen rating info``() =
+    let result = searchForOxygenRating sampleInput
+
+    Assert.Equal(1, result |> List.length)
+    Assert.Equal(23, result |> List.head |> Array.toList |> toDecimal)
+
+[<Fact>]
+let ``Get CO2 scrubber rating``() =
+    let result = searchForCO2Rating sampleInput
+
+    Assert.Equal(1, result |> List.length)
+    Assert.Equal(10, result |> List.head |> Array.toList |> toDecimal)

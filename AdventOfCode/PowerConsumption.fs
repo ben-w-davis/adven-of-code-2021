@@ -38,6 +38,9 @@ let calculateAll (accList : BitAccumulator list) (report : Bit List) =
 let choose acc = 
     if acc.Ones > acc.Zeros then One else Zero
 
+let chooseForOxygen acc = if acc.Ones >= acc.Zeros then One else Zero
+let chooseForCarbonDioxide acc = if acc.Ones < acc.Zeros then One else Zero
+
 let chooseAll accList = 
     accList |> List.map choose
 
@@ -45,6 +48,11 @@ let gammaBit bitList =
     bitList
     |> List.fold calculate init
     |> choose
+
+let gammaByChoice choice bitList =
+    bitList
+    |> List.fold calculate init
+    |> choice
 
 let gamma (reports : Bit List List) =
     reports
@@ -77,3 +85,25 @@ let getTotal reports =
     let epsilon = epsilon gamma 
     (toDecimal gamma) * (toDecimal epsilon)
     
+let search choice (searchList : Bit[] List) index =
+    let bits = searchList |> List.map (fun x -> x.[index])
+    let result = gammaByChoice choice bits
+    searchList |> List.filter (fun x -> x.[index] = result)
+
+let rec searchRec choice index (searchList : Bit[] List) =
+    if searchList.Length <= 1 
+    then searchList
+    else
+        search choice searchList index
+        |> searchRec choice (index + 1)
+
+let searchForOxygenRating reports =
+    reports 
+    |> List.map (decodeBits >> List.toArray)
+    |> searchRec chooseForOxygen 0
+
+let searchForCO2Rating reports =
+    reports 
+    |> List.map (decodeBits >> List.toArray)
+    |> searchRec chooseForCarbonDioxide 0
+
