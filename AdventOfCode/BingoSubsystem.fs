@@ -72,4 +72,17 @@ let parser (input:string) =
     let boards = boardBuilder 0 None [] (lines |> Array.skip 2 |> Array.toList)
     toGameState moves boards
 
+let mark numbers space =
+    if numbers |> List.contains space.Value then
+        { space with Marked = true }
+    else
+        space
+
+
+let markBoard board numbers =
+    board.Spaces
+    |> List.map (mark numbers)
+    |> toBoard
+
+
     

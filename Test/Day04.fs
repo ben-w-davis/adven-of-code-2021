@@ -73,3 +73,24 @@ let ``Parse sample input``() =
     Assert.Equal(27, result.Moves.Length)
     Assert.Equal(3, result.Boards.Length)
 
+[<Fact>]
+let ``Apply numbers to a single board``() =
+    let board = { 
+        Spaces = 
+            [
+                initSpace 1 (0,0)
+                initSpace 2 (0,1)
+                initSpace 3 (0,2)
+                initSpace 4 (0,3)
+                initSpace 5 (0,4)
+            ]
+        }
+    let numbers = [3; 5]
+
+    let result = markBoard board numbers
+    let expected = 
+        [|
+            { initSpace 3 (0,2) with Marked = true }
+            { initSpace 5 (0,4) with Marked = true }
+        |]
+    Assert.Equal(expected, result.Spaces |> List.filter (fun x -> x.Marked))
