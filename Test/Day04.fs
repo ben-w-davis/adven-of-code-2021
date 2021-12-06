@@ -189,6 +189,16 @@ let ``Win last from sample input``() =
 
     Assert.Equal(13, result.WinningNumber)
     Assert.Equal(148, result.UnMarked)
-    Assert.Equal(1924, result.Score)
+    Assert.Equal(1_924, result.Score)
+
+
+[<Fact>]
+let ``Win last from text input``() =
+    let input = System.IO.File.ReadAllText "day04_input.txt"
+    let result = runLast input
+
+    Assert.Equal(94, result.WinningNumber)
+    Assert.Equal(172, result.UnMarked)
+    Assert.Equal(16_168, result.Score)
 
 
