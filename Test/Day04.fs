@@ -32,3 +32,18 @@ let ``Parse moves list``()=
 
     Assert.Equal(7, result |> Array.head)
     Assert.Equal(27, result |> Array.length)
+
+[<Fact>]
+let ``Build first line of first board``() =
+    let line = "22 13 17 11  0"
+    let result = buildSpaceLine line
+
+    let expected = 
+        [
+            initSpace 22 (0,0)
+            initSpace 13 (0,1)
+            initSpace 17 (0,2)
+            initSpace 11 (0,3)
+            initSpace 0 (0,4)
+        ] |> Array.ofList
+    Assert.Equal(expected, result)

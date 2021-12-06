@@ -31,4 +31,10 @@ let getMoves (textInput:string) =
     firstLine.Split(',')
     |> Array.map toInt
 
-    
+let buildSpaceLine (line:string) =
+    line.Split(' ')
+    |> Array.filter (fun x -> not (String.IsNullOrWhiteSpace(x)))
+    |> Array.map toInt
+    |> Array.mapi (fun i x -> initSpace x (0,i))
+    |> Array.toList
+
