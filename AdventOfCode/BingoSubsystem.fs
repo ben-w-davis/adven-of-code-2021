@@ -12,6 +12,11 @@ type Board = {
     Spaces : Space list
 }
 
+type GameState = {
+    Moves : int list
+    Boards : Board list
+}
+
 let initBoard = { Spaces = [] }
 let initSpace value (row,col) =
     {
@@ -21,6 +26,7 @@ let initSpace value (row,col) =
         Marked = false
     }
 let toBoard spaces = { Spaces = spaces }
+let toGameState moves boards = { Moves = moves |> Seq.toList; Boards = boards }
 
 let toInt (num:string) =
     match Int32.TryParse num with
@@ -59,13 +65,11 @@ let rec boardBuilder boardIndex board boardList (lines:string list) =
             let boardLine = buildSpaceLine line boardIndex
             let newBoard = List.concat (seq { workingBoard.Spaces; boardLine }) |> toBoard
             boardBuilder (boardIndex + 1) (Some newBoard) boardList remaining
-
         
-        
-
 let parser (input:string) =
     let lines = input.Split('\n')
     let moves = getMoves(lines.[0])
-    ()
+    let boards = boardBuilder 0 None [] (lines |> Array.skip 2 |> Array.toList)
+    toGameState moves boards
 
     

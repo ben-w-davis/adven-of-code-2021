@@ -65,3 +65,11 @@ let ``Build board recursively``() =
     Assert.Equal(1, result.Length)
     let first = result |> List.head
     Assert.Equal(25, first.Spaces.Length)
+
+[<Fact>]
+let ``Parse sample input``() =
+    let result = parser sampleInput
+
+    Assert.Equal(27, result.Moves.Length)
+    Assert.Equal(3, result.Boards.Length)
+
