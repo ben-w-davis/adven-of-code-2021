@@ -128,7 +128,25 @@ let rec runRec gameState =
             toGameState remaining boards
             |> runRec
 
+let rec runRecLast gameState =
+    match gameState.Moves with
+    | [] -> toResult -1 0
+    | next::remaining ->
+        let scoredBoards = gameState.Boards |> List.map (markOne next)
+        match scoredBoards |> List.filter (doesBoardWin >> not) with
+        | [last] -> 
+            toGameState remaining [last] |> runRec
+        | _ -> 
+            toGameState remaining scoredBoards
+            |> runRecLast
+
+
+
+
 let run input =
     parser input
     |> runRec 
 
+let runLast input =
+    let data = parser input
+    runRecLast data

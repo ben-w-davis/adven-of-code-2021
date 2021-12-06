@@ -176,3 +176,19 @@ let ``Run sample input game``() =
     Assert.Equal(188, result.UnMarked)
     Assert.Equal(4512, result.Score)
 
+[<Fact>]
+let ``Run text input through game``() =
+    let input = System.IO.File.ReadAllText "day04_input.txt"
+    let result = run input
+    
+    Assert.Equal(22_680, result.Score)
+
+[<Fact>]
+let ``Win last from sample input``() =
+    let result = runLast sampleInput
+
+    Assert.Equal(13, result.WinningNumber)
+    Assert.Equal(148, result.UnMarked)
+    Assert.Equal(1924, result.Score)
+
+
