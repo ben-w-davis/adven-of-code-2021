@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Library.fs" />
     <Compile Include="PowerConsumption.fs" />
+    <Compile Include="BingoSubsystem.fs" />
   </ItemGroup>
 
 </Project>
