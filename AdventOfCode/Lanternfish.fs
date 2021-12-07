@@ -25,3 +25,13 @@ let timerTick lanternfish =
 let timerTickAll fishes =
     fishes
     |> List.collect timerTick
+
+let rec tickDown days fishes =
+    if days = 0 then fishes
+    else
+        timerTickAll fishes
+        |> tickDown (days-1)
+
+let runSimulation input days =
+    parseFish input
+    |> tickDown days

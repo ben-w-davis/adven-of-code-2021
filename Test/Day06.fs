@@ -59,3 +59,13 @@ let ``Create fish from input line``() =
         createLanternfish 2
     |]
     Assert.Equal(expected, fishes)
+
+[<Fact>]
+let ``Run sample input for 18 days``() =
+    let result = runSimulation sampleInput 18
+    Assert.Equal(26, result.Length)
+
+[<Fact>]
+let ``Run sample input for 80 days``() =
+    let result = runSimulation sampleInput 80
+    Assert.Equal(5934, result.Length)
