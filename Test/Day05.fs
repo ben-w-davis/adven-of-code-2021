@@ -24,7 +24,25 @@ let ``Decode input first line``() =
     Assert.Equal(9, result.y1)
     Assert.Equal(5, result.x2)
     Assert.Equal(9, result.y2)
+
+[<Fact>]
+let ``Decode whole sample input``()=
+    let lines = parseLines sampleInput
+
+    Assert.Equal(10, lines.Length)
+    Assert.Equal(4, lines.[7].y2)
+
+[<Fact>]
+let ``Identify keeper lines``() =
+    let goodLine = buildLine (0,9) (5,9)
+    let badLine = buildLine (8,0) (0,8)
+    Assert.True(isSimpleLine goodLine)
+    Assert.False(isSimpleLine badLine)
+
 [<Fact>]
 let ``Keep only horizontal and vertical lines``() =
-    ()
+    let lines = parseLines sampleInput
+    let goodLines = keepHorizontalAndVertical lines
+    
+    Assert.Equal(6, goodLines.Length)
      

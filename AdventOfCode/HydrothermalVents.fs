@@ -13,6 +13,9 @@ let toInt (num:string) =
     | (true, n) -> n
     | _ -> failwith "No number"
 
+let buildLine (x1,y1) (x2,y2) =
+    { x1 = x1; y1 = y1; x2 = x2; y2 = y2 }
+
 let parseLine (line:string) =
     let parts = line.Split(' ')
     let firstPair = parts.[0].Split(',')
@@ -24,4 +27,14 @@ let parseLine (line:string) =
         y2 = secondPair.[1] |> toInt
     }
 
+let parseLines (textInput:string) =
+    textInput.Split('\n')
+    |> Array.map parseLine
 
+let isSimpleLine line =
+    line.x1 = line.x2 || line.y1 = line.y2
+
+let keepHorizontalAndVertical lines =
+    lines
+    |> Seq.filter isSimpleLine
+    |> Seq.toList
