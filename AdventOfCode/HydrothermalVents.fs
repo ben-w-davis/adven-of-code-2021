@@ -8,6 +8,11 @@ type Line = {
     y2 : int
 }
 
+type Coordinates = {
+    x : int
+    y : int
+}
+
 let toInt (num:string) =
     match Int32.TryParse num with
     | (true, n) -> n
@@ -38,3 +43,29 @@ let keepHorizontalAndVertical lines =
     lines
     |> Seq.filter isSimpleLine
     |> Seq.toList
+
+let createCoordinatesFromLine line =
+    let xdiff = line.x1 - line.x2
+    let ydiff = line.y1 - line.y2
+    match (xdiff, ydiff) with
+    | (0,y) when y > 0  -> 
+        [|line.y2 .. line.y1|]
+        |> Array.rev
+        |> Array.map (fun y -> { x = line.x1; y = y })
+        |> Array.toList
+    | (0,y) when y < 0 ->
+        [|line.y1 .. line.y2|]
+        |> Array.map (fun y -> { x = line.x1; y = y })
+        |> Array.toList
+    | (x,0) when x > 0 ->
+        [|line.x2 .. line.x1|]
+        |> Array.rev
+        |> Array.map (fun x -> { x = x; y = line.y1 })
+        |> Array.toList
+    | (x,0) when x < 0 ->
+        [|line.x1 .. line.x2|]
+        |> Array.map (fun x -> { x = x; y = line.y1 })
+        |> Array.toList
+    | _ ->
+        [
+        ]

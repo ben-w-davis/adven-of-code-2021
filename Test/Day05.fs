@@ -46,3 +46,29 @@ let ``Keep only horizontal and vertical lines``() =
     
     Assert.Equal(6, goodLines.Length)
      
+
+[<Fact>]
+let ``Get coordinates from line``() =
+    let line = parseLine "2,2 -> 2,1"
+    let result = createCoordinatesFromLine line
+    let expected =
+        [|
+            { x = 2; y = 2 }
+            { x = 2; y = 1 }
+        |]
+
+    Assert.Equal(expected, result)
+
+[<Fact>]
+let ``Get coordinates from another line``() =
+    let line = parseLine "7,0 -> 7,4"
+    let result = createCoordinatesFromLine line
+    let expected =
+        [|
+            { x = 7; y = 0 }
+            { x = 7; y = 1 }
+            { x = 7; y = 2 }
+            { x = 7; y = 3 }
+            { x = 7; y = 4 }
+        |]
+    Assert.Equal(expected, result)
