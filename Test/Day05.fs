@@ -81,12 +81,25 @@ let ``Get all horizontal and vertical coordinates from lines``() =
     Assert.Equal (5, result |> List.length)
 
 [<Fact>]
-let ``Get all coordinates from puzzle input``() =
+let ``Get all horizontal and vertical coordinates from puzzle input``() =
     let input = System.IO.File.ReadAllText "day05_input.txt"
     let lines = parseLines input |> keepHorizontalAndVertical
     let result = createAllCoordinates lines
 
-    Assert.Equal (6841, result.Length)
+    Assert.Equal (6_841, result.Length)
+
+[<Fact>]
+let ``Create diagonal coordinates``() =
+    let line = parseLine "1,1 -> 3,3"
+    let result = createDiagonal line
+
+    let expected = 
+        [|
+            coord (1,1)
+            coord (2,2)
+            coord (3,3)
+        |]
+    Assert.Equal(expected, result)
 
 [<Fact>]
 let ``Get all coordinates from lines``() =
@@ -94,3 +107,11 @@ let ``Get all coordinates from lines``() =
     let result = createAllCoordinates lines
 
     Assert.Equal (12, result |> List.length)
+
+[<Fact>]
+let ``Get all coordinates from puzzle input``() =
+    let input = System.IO.File.ReadAllText "day05_input.txt"
+    let lines = parseLines input |> Array.toList
+    let result = createAllCoordinates lines
+
+    Assert.Equal (19_258, result.Length)

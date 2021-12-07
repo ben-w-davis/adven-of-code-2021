@@ -47,30 +47,31 @@ let keepHorizontalAndVertical lines =
 
 let coord (x,y) = { x = x; y = y }
 
+let createDiagonal line =
+    let xdiff = line.x1 - line.x2
+    let ydiff = line.y1 - line.y2
+    let xs = if xdiff > 0 then [line.x2 .. line.x1] |> List.rev else [line.x1 .. line.x2]
+    let ys = if ydiff > 0 then [line.y2 .. line.y1] |> List.rev else [line.y1 .. line.y2]
+    ys
+    |> List.zip xs
+    |> List.map coord
+
 let createCoordinatesFromLine line =
     let xcoord y = coord (line.x1, y)
     let ycoord x = coord (x, line.y1)
     let xdiff = line.x1 - line.x2
     let ydiff = line.y1 - line.y2
+    let xs = if xdiff > 0 then [line.x2 .. line.x1] |> List.rev else [line.x1 .. line.x2]
+    let ys = if ydiff > 0 then [line.y2 .. line.y1] |> List.rev else [line.y1 .. line.y2]
     match (xdiff, ydiff) with
-    | (0,y) when y > 0  -> 
-        [line.y2 .. line.y1]
-        |> List.rev
-        |> List.map xcoord
-    | (0,y) when y < 0 ->
-        [line.y1 .. line.y2]
-        |> List.map xcoord
-    | (x,0) when x > 0 ->
-        [line.x2 .. line.x1]
-        |> List.rev
-        |> List.map ycoord
-    | (x,0) when x < 0 ->
-        [line.x1 .. line.x2]
-        |> List.map ycoord
+    | (0,_) -> 
+        ys |> List.map xcoord
+    | (_,0) ->
+        xs |> List.map ycoord
     | (x,y) ->
-        let xs = if xdiff > 0 then [line.x2 .. line.x1] |> List.rev else [line.x1 .. line.x2]
-        let ys = if ydiff > 0 then [line.y2 .. line.y1] |> List.rev else [line.y1 .. line.y2]
-        [ coord (line.x1,line.y1) ]
+        ys
+        |> List.zip xs
+        |> List.map coord
 
 let createAllCoordinates lines =
     lines
