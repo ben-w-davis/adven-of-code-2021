@@ -4,6 +4,7 @@ open Xunit
 open Lanternfish
 
 let sampleInput = "3,4,3,1,2"
+let puzzleInput = "1,2,5,1,1,4,1,5,5,5,3,4,1,2,2,5,3,5,1,3,4,1,5,2,5,1,4,1,2,2,1,5,1,1,1,2,4,3,4,2,2,4,5,4,1,2,3,5,3,4,1,1,2,2,1,3,3,2,3,2,1,2,2,3,1,1,2,5,1,2,1,1,3,1,1,5,5,4,1,1,5,1,4,3,5,1,3,3,1,1,5,2,1,2,4,4,5,5,4,4,5,4,3,5,5,1,3,5,2,4,1,1,2,2,2,4,1,2,1,5,1,3,1,1,1,2,1,2,2,1,3,3,5,3,4,2,1,5,2,1,4,1,1,5,1,1,5,4,4,1,4,2,3,5,2,5,5,2,2,4,4,1,1,1,4,4,1,3,5,4,2,5,5,4,4,2,2,3,2,1,3,4,1,5,1,4,5,2,4,5,1,3,4,1,4,3,3,1,1,3,2,1,5,5,3,1,1,2,4,5,3,1,1,1,2,5,2,4,5,1,3,2,4,5,5,1,2,3,4,4,1,4,1,1,3,3,5,1,2,5,1,2,5,4,1,1,3,2,1,1,1,3,5,1,3,2,4,3,5,4,1,1,5,3,4,2,3,1,1,4,2,1,2,2,1,1,4,3,1,1,3,5,2,1,3,2,1,1,1,2,1,1,5,1,1,2,5,1,1,4"
 
 [<Fact>]
 let ``Create lanternfish from internal timer state``() =
@@ -69,3 +70,18 @@ let ``Run sample input for 18 days``() =
 let ``Run sample input for 80 days``() =
     let result = runSimulation sampleInput 80
     Assert.Equal(5934, result.Length)
+
+[<Fact>]
+let ``Run puzzle input for 80 days``() =
+    let result = runSimulation puzzleInput 80
+    Assert.Equal(356_190, result.Length)
+
+[<Fact>]
+let ``Run puzzle input for 80 days - fast``() =
+    let result = runSimulationFaster puzzleInput 80
+    Assert.Equal(356_190, result.Length)
+
+[<Fact(Skip = "not yet!")>]
+let ``Run puzzle input for 256 days - fast``() =
+    let result = runSimulationFaster puzzleInput 256
+    Assert.Equal(356_190, result.Length)
