@@ -47,3 +47,15 @@ let ``Timer tick down across multiple fish``() =
             createLanternfish 2
         |]
     Assert.Equal(expected, result)
+
+[<Fact>]
+let ``Create fish from input line``() =
+    let fishes = parseFish sampleInput
+    let expected = [|
+        createLanternfish 3
+        createLanternfish 4
+        createLanternfish 3
+        createLanternfish 1
+        createLanternfish 2
+    |]
+    Assert.Equal(expected, fishes)
