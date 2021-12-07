@@ -72,3 +72,25 @@ let ``Get coordinates from another line``() =
             { x = 7; y = 4 }
         |]
     Assert.Equal(expected, result)
+
+[<Fact>]
+let ``Get all horizontal and vertical coordinates from lines``() =
+    let lines = parseLines sampleInput |> keepHorizontalAndVertical
+    let result = createAllCoordinates lines
+
+    Assert.Equal (5, result |> List.length)
+
+[<Fact>]
+let ``Get all coordinates from puzzle input``() =
+    let input = System.IO.File.ReadAllText "day05_input.txt"
+    let lines = parseLines input |> keepHorizontalAndVertical
+    let result = createAllCoordinates lines
+
+    Assert.Equal (6841, result.Length)
+
+[<Fact>]
+let ``Get all coordinates from lines``() =
+    let lines = parseLines sampleInput  |> List.ofArray
+    let result = createAllCoordinates lines
+
+    Assert.Equal (12, result |> List.length)

@@ -34,6 +34,7 @@ let parseLine (line:string) =
 
 let parseLines (textInput:string) =
     textInput.Split('\n')
+    |> Array.filter (String.IsNullOrWhiteSpace >> not)
     |> Array.map parseLine
 
 let isSimpleLine line =
@@ -66,5 +67,14 @@ let createCoordinatesFromLine line =
     | (x,0) when x < 0 ->
         [line.x1 .. line.x2]
         |> List.map ycoord
-    | _ ->
+    | (x,y) ->
+        let xs = if xdiff > 0 then [line.x2 .. line.x1] |> List.rev else [line.x1 .. line.x2]
+        let ys = if ydiff > 0 then [line.y2 .. line.y1] |> List.rev else [line.y1 .. line.y2]
         [ coord (line.x1,line.y1) ]
+
+let createAllCoordinates lines =
+    lines
+    |> List.collect createCoordinatesFromLine
+    |> List.groupBy (fun coord -> sprintf "%i,%i" coord.x coord.y)
+    |> List.filter (fun (code, coords) -> coords.Length > 1)
+    |> List.map (fun (code,coords) -> code)
