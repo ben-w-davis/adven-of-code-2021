@@ -79,9 +79,9 @@ let ``Run puzzle input for 80 days``() =
 [<Fact>]
 let ``Run puzzle input for 80 days - fast``() =
     let result = runSimulationFaster puzzleInput 80
-    Assert.Equal(356_190, result.Length)
+    Assert.Equal(356_190L, result)
 
-[<Fact(Skip = "not yet!")>]
+[<Fact>]
 let ``Run puzzle input for 256 days - fast``() =
     let result = runSimulationFaster puzzleInput 256
-    Assert.Equal(356_190, result.Length)
+    Assert.Equal(1_617_359_101_538L, result)
