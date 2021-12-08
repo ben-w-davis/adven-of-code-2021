@@ -12,6 +12,7 @@
     <Compile Include="BingoSubsystem.fs" />
     <Compile Include="HydrothermalVents.fs" />
     <Compile Include="Lanternfish.fs" />
+    <Compile Include="CrabSubmarines.fs" />
   </ItemGroup>
 
 </Project>
