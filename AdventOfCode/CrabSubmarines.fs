@@ -1,21 +1,21 @@
 ﻿module CrabSubmarines
 open System
+open System.Collections.Generic
 
 let fuelUse (crab:int) (position:int) =
     let result = crab - position
     if result < 0 then -1 * result else result
 
-let fuelTable =
-    [1 .. 2000]
-    |> List.map (fun n -> (n, [1..n] |> List. sum))
-    |> dict
+let mutable fuelTable = new Dictionary<int,int>()
 
 let betterFuelUse (crab:int) (position:int) =
-    let temp = fuelTable
     let rawFuel = fuelUse crab position
-    match temp.TryGetValue rawFuel with
+    match fuelTable.TryGetValue rawFuel with
     | (true, value) -> value
-    | _ -> [1 .. rawFuel] |> List.sum
+    | _ -> 
+        let fuelUsed = [1 .. rawFuel] |> List.sum
+        fuelTable.Add(rawFuel, fuelUsed)
+        fuelUsed
 
 let allFuelUse crabs position =
     crabs
