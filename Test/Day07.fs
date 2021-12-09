@@ -22,3 +22,16 @@ let ``Calculate fuel usage for many crabs``() =
     let result = allFuelUse crabs position
 
     Assert.Equal(37, result)
+
+[<Fact>]
+let ``Determine positions from crabs``() =
+    let crabs = [16;1;2;0;4;2;7;1;2;14]
+    let average = getAveragePosition crabs
+    let highest = getHighestPosition crabs
+    let lowest = getLowestPosition crabs
+    let most = getMostCommonPosition crabs
+
+    Assert.Equal(4, average)
+    Assert.Equal(16, highest)
+    Assert.Equal(0, lowest)
+    Assert.Equal(2, most)
