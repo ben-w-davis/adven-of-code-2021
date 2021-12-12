@@ -37,4 +37,25 @@ let getNeighbors (heightmap : int[][]) (x,y) =
 
     [left; right; top; bottom] |> List.choose id
 
+let keepLowPoint neighbors value =
+    let min = neighbors |> List.min
+    if value < min then 
+        Some value
+    else
+        None
+
+let getLowPoints (heightmap : int[][]) =
+    let line = heightmap |> Array.head
+    let makeNeighbors v x y =
+        let neighbors = getNeighbors heightmap (x,y)
+        (v, neighbors)
+    let processLine index line =
+        line
+        |> Array.mapi (fun i v -> makeNeighbors v i index)
+        |> Array.choose (fun (v,n) -> keepLowPoint n v )
+        |> Array.toList
+    heightmap
+    |> Array.mapi (fun i line -> processLine i line)
+    |> Seq.collect (fun line -> line)
+    |> Seq.toList
 

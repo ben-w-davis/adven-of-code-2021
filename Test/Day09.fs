@@ -70,3 +70,27 @@ let ``Get neighbors for item at bottom-left of heightmap``() =
     let expected = [8;8]
     result |> should equal expected
 
+[<Fact>]
+let ``Use neighbors to check for low point``() =
+    let neighbors = [1;2]
+    let value = 0
+    let result = keepLowPoint neighbors value
+
+    result |> should equal (Some value)
+
+[<Fact>]
+let ``Use neighbors to check for low point not being found``() =
+    let neighbors = [2;4;4]
+    let value = 3
+    let result = keepLowPoint neighbors value
+
+    result |> should equal None
+
+[<Fact>]
+let ``Search all lines for low points``() =
+    let heightmap = readInput sampleInput
+    let result = getLowPoints heightmap
+
+    result |> should equal [1;0;5;5]
+    
+
