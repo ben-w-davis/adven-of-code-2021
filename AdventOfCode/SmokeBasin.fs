@@ -62,3 +62,83 @@ let getRiskLevelSum heightmap =
     getLowPoints heightmap
     |> List.map (fun x -> x + 1)
     |> List.sum
+
+type Location = {
+    Top : Location option
+    Bottom : Location option
+    Left : Location option
+    Right : Location option
+    Position : int * int
+    Height : int
+}
+let emptyLoc position value = 
+    {
+        Height = value
+        Position = position
+        Top = None
+        Bottom = None
+        Left = None
+        Right = None
+    }
+
+let rec buildLocation (heightmap : int[][]) usedPositions (x,y) =
+    let buildLoc (x2,y2) =
+        let value = getValue heightmap (x2,y2)
+        if value = 9 || usedPositions |> List.contains (x2,y2) then
+            None
+        else
+            buildLocation heightmap ((x2,y2)::usedPositions) (x2,y2)
+    let top = 
+        if y > 0 then
+            buildLoc (x,y-1)
+        else
+            None
+    let bottom = 
+        if y < heightmap.Length - 1 then
+            buildLoc (x,y+1)
+        else
+            None
+
+    let left = 
+        if x > 0 then
+            buildLoc (x-1,y)
+        else
+            None
+    let right = 
+        if x < heightmap[0].Length - 1 then
+            buildLoc (x+1,y)
+        else
+            None
+    
+    {
+        Height = getValue heightmap (x,y)
+        Position = (x,y)
+        Top = top
+        Bottom = bottom
+        Left = left
+        Right = right
+    } |> Some
+
+let rec usedPositions location =
+    let toList loc = loc |> Option.map usedPositions |> Option.defaultValue []
+    [
+        [location.Position]
+        location.Top |> toList
+        location.Bottom |> toList
+        location.Left |> toList
+        location.Right |> toList
+    ] |> List.collect id
+
+
+type Basin = {
+    Positions : (int * int) list
+    Size : int
+}
+
+let createBasin location =
+    let positions = usedPositions location
+    {
+        Positions = positions
+        Size = positions.Length
+    }
+

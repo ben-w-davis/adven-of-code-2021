@@ -102,6 +102,36 @@ let ``Get sum of risk level``() =
 
 
 
+[<Fact>]
+let ``Build basin locations``() =
+    let heightmap = readInput sampleInput
+    let result = buildLocation heightmap [(0,0)] (0,0)
 
+    let expected =
+        {
+            Height = 2
+            Position = (0,0)
+            Top = None
+            Bottom = emptyLoc (0,1) 3 |> Some
+            Left = None
+            Right = emptyLoc (1,0) 1 |> Some
+        } |> Some
     
+    result |> should equal expected
+
+[<Fact>]
+let ``Create basin from location``() =
+    let location =
+        {
+            Height = 2
+            Position = (0,0)
+            Top = None
+            Bottom = emptyLoc (0,1) 3 |> Some
+            Left = None
+            Right = emptyLoc (1,0) 1 |> Some
+        } 
+    let result = createBasin location
+    
+    result.Positions |> should equal [(0,0); (0,1); (1,0)]
+    result.Size |> should equal 3
 
