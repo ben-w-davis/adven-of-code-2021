@@ -92,5 +92,16 @@ let ``Search all lines for low points``() =
     let result = getLowPoints heightmap
 
     result |> should equal [1;0;5;5]
+
+[<Fact>]
+let ``Get sum of risk level``() =
+    let heightmap = readInput sampleInput
+    let result = getRiskLevelSum heightmap
+
+    result |> should equal 15
+
+
+
+
     
 

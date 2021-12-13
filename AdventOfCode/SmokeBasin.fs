@@ -45,7 +45,6 @@ let keepLowPoint neighbors value =
         None
 
 let getLowPoints (heightmap : int[][]) =
-    let line = heightmap |> Array.head
     let makeNeighbors v x y =
         let neighbors = getNeighbors heightmap (x,y)
         (v, neighbors)
@@ -59,3 +58,7 @@ let getLowPoints (heightmap : int[][]) =
     |> Seq.collect (fun line -> line)
     |> Seq.toList
 
+let getRiskLevelSum heightmap =
+    getLowPoints heightmap
+    |> List.map (fun x -> x + 1)
+    |> List.sum
