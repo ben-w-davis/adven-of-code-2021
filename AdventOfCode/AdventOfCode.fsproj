@@ -15,6 +15,7 @@
     <Compile Include="CrabSubmarines.fs" />
     <Compile Include="SevenSegmentDisplay.fs" />
     <Compile Include="SmokeBasin.fs" />
+    <Compile Include="SyntaxScoring.fs" />
   </ItemGroup>
 
 </Project>
