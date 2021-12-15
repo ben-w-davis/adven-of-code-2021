@@ -20,15 +20,17 @@ let readInput (input:string) =
     { Lines = lines }
     
 let parseChar (c : char) state =
+    let push = { state with Stack = c::state.Stack }
+    let pop remainder = { state with Stack = remainder }
     match (c, state.Stack) with
-    | '(',_ -> { state with Stack = c::state.Stack }
-    | ')','('::remainder -> { state with Stack = remainder }
-    | '[',_ -> { state with Stack = c::state.Stack }
-    | ']','['::remainder -> { state with Stack = remainder }
-    | '{',_ -> { state with Stack = c::state.Stack }
-    | '}','{'::remainder -> { state with Stack = remainder }
-    | '<',_ -> { state with Stack = c::state.Stack }
-    | '>','<'::remainder -> { state with Stack = remainder }
+    | '(',_ -> push
+    | ')','('::remainder -> pop remainder
+    | '[',_ -> push
+    | ']','['::remainder -> pop remainder
+    | '{',_ -> push
+    | '}','{'::remainder -> pop remainder
+    | '<',_ -> push
+    | '>','<'::remainder -> pop remainder
     | _ -> { state with SyntaxError = Some c }
 
 let parseLine (line:string) =
