@@ -1,6 +1,18 @@
 ﻿module SmokeBasin
 open System
 
+type HeightMap = {
+    MapValue : int[][]
+    MapWidth : int
+    MapHeight : int
+}
+let createHeightMap (input:int[][]) =
+    {
+        MapValue = input
+        MapWidth = input.[0].Length - 1
+        MapHeight = input.Length - 1
+    }
+
 let readInput (input:string) =
     let splitLine (str:string) =
         str
@@ -8,18 +20,20 @@ let readInput (input:string) =
         |> Seq.toArray
     input.Split("\r\n")
     |> Array.map splitLine
+    |> createHeightMap
 
-let getValue (heightmap:int[][]) (x,y) =
-    heightmap[y][x]
 
-let getNeighbors (heightmap : int[][]) (x,y) =
+let getValue heightmap (x,y) =
+    heightmap.MapValue[y][x]
+
+let getNeighbors heightmap (x,y) =
     let top = 
         if y > 0 then
             getValue heightmap (x,y-1) |> Some
         else
             None
     let bottom = 
-        if y < heightmap.Length - 1 then
+        if y < heightmap.MapHeight then
             getValue heightmap (x,y+1) |> Some
         else
             None
@@ -30,7 +44,7 @@ let getNeighbors (heightmap : int[][]) (x,y) =
         else
             None
     let right = 
-        if x < heightmap[0].Length - 1 then
+        if x < heightmap.MapWidth then
             getValue heightmap (x+1,y) |> Some
         else
             None
@@ -44,7 +58,7 @@ let keepLowPoint neighbors value =
     else
         None
 
-let getLowPoints (heightmap : int[][]) =
+let getLowPoints heightmap =
     let makeNeighbors v x y =
         let neighbors = getNeighbors heightmap (x,y)
         (v, neighbors)
@@ -53,7 +67,7 @@ let getLowPoints (heightmap : int[][]) =
         |> Array.mapi (fun i v -> makeNeighbors v i index)
         |> Array.choose (fun (v,n) -> keepLowPoint n v )
         |> Array.toList
-    heightmap
+    heightmap.MapValue
     |> Array.mapi (fun i line -> processLine i line)
     |> Seq.collect (fun line -> line)
     |> Seq.toList
@@ -81,43 +95,50 @@ let emptyLoc position value =
         Right = None
     }
 
-let rec buildLocation (heightmap : int[][]) usedPositions (x,y) =
+let rec buildLocation heightmap usedPositions (x,y) =
     let buildLoc (x2,y2) =
         let value = getValue heightmap (x2,y2)
         if value = 9 || usedPositions |> List.contains (x2,y2) then
             None
         else
-            buildLocation heightmap ((x2,y2)::usedPositions) (x2,y2)
-    let top = 
+            let reduced = (x,y)::usedPositions |> List.distinct
+            buildLocation heightmap reduced (x2,y2)
+
+    let top () = 
         if y > 0 then
             buildLoc (x,y-1)
         else
             None
-    let bottom = 
-        if y < heightmap.Length - 1 then
+
+    let bottom () = 
+        if y < heightmap.MapHeight then
             buildLoc (x,y+1)
         else
             None
 
-    let left = 
+    let left () = 
         if x > 0 then
             buildLoc (x-1,y)
         else
             None
-    let right = 
-        if x < heightmap[0].Length - 1 then
+
+    let right () = 
+        if x < heightmap.MapWidth then
             buildLoc (x+1,y)
         else
             None
-    
-    {
-        Height = getValue heightmap (x,y)
-        Position = (x,y)
-        Top = top
-        Bottom = bottom
-        Left = left
-        Right = right
-    } |> Some
+
+    let value = getValue heightmap (x,y)
+    if value = 9 || usedPositions |> List.contains (x,y) then None
+    else
+        {
+            Height = value
+            Position = (x,y)
+            Top = top ()
+            Bottom = bottom ()
+            Left = left ()
+            Right = right ()
+        } |> Some
 
 let rec usedPositions location =
     let toList loc = loc |> Option.map usedPositions |> Option.defaultValue []
@@ -136,9 +157,47 @@ type Basin = {
 }
 
 let createBasin location =
-    let positions = usedPositions location
+    let positions = usedPositions location |> List.distinct
     {
-        Positions = positions
+        Positions = positions 
         Size = positions.Length
     }
+
+let findBasins heightmap =
+    let allPositions =
+        [
+            for y in [0 .. heightmap.MapHeight] do
+                for x in [0 .. heightmap.MapWidth] do
+                    yield x,y
+        ]
+
+    let search (state:Basin list) pos =
+        match state with
+        | [] -> 
+            let loc = buildLocation heightmap [] pos
+            match loc with
+            | Some basinSeed -> 
+                let basin = createBasin basinSeed
+                printfn "Created Basin #%i, Size: %i" 1 (basin.Size)
+                [basin]
+            | None -> []
+        | basins ->
+            let used = basins |> List.collect (fun x -> x.Positions)
+            let loc = buildLocation heightmap used pos
+            match loc with
+            | Some basinSeed -> 
+                let basin = createBasin basinSeed
+                printfn "Created Basin #%i, Size: %i" 1 (basin.Size)
+                basin::basins
+            | None -> basins
+
+    allPositions
+    |> List.fold search []
+    |> List.sortByDescending (fun x -> x.Size)
+
+let basinScore heightmap = 
+    findBasins heightmap
+    |> List.take 3
+    |> List.map (fun x -> x.Size)
+    |> List.fold (*) 1
 
