@@ -58,3 +58,19 @@ let scoreCorruptedLines input =
     findCorruptedLines input
     |> List.map scoreChar
     |> List.sum
+
+let completeIncompleteLine line =
+    let state = parseLine line
+    let matchIt c =
+        match c with
+        | '[' -> ']'
+        | '{' -> '}'
+        | '<' -> '>'
+        | '(' -> ')'
+        | _ -> failwith "oh no"
+    let temp =
+        state.Stack
+        |> List.map matchIt
+        |> List.toArray
+    new string(temp)
+

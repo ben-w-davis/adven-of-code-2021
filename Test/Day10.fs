@@ -215,3 +215,9 @@ let ``Find score for puzzle input``() =
     let result = scoreCorruptedLines lines
 
     result |> should equal 268845
+
+[<Theory>]
+[<InlineData("[({(<(())[]>[[{[]{<()<>>","}}]])})]")>]
+let ``Complete incomplete line correctly``(line, expected) =
+    let result = completeIncompleteLine line
+    result |> should equal expected
