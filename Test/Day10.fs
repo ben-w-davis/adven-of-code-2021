@@ -89,9 +89,13 @@ let ``Parse first line of sample input``() =
 
     result.SyntaxError |> should equal None
 
-[<Fact>]
-let ``Parse corrupted line``() =
-    let line = "{([(<{}[<>[]}>{[]{[(<()>"
+[<Theory>]
+[<InlineData("{([(<{}[<>[]}>{[]{[(<()>", '}')>]
+[<InlineData("[[<[([]))<([[{}[[()]]]", ')')>]
+[<InlineData("[{[{({}]{}}([{[{{{}}([]", ']')>]
+[<InlineData("[<(<(<(<{}))><([]([]()", ')')>]
+[<InlineData("<{([([[(<>()){}]>(<<{{", '>')>]
+let ``Parse corrupted line``(line, expected) =
     let result = parseLine line
 
-    result.SyntaxError |> should equal (Some '}')
+    result.SyntaxError |> should equal (Some expected)
