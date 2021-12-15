@@ -99,3 +99,17 @@ let ``Parse corrupted line``(line, expected) =
     let result = parseLine line
 
     result.SyntaxError |> should equal (Some expected)
+
+[<Fact>]
+let ``Find corrupted lines in sample input``() =
+    let lines = readInput sampleInput
+    let result = findCorruptedLines lines
+
+    result |> should equal [')'; ')'; '>'; ']'; '}']
+
+[<Fact>]
+let ``Find score for sample input``() =
+    let lines = readInput sampleInput
+    let result = scoreCorruptedLines lines
+
+    result |> should equal 26_397

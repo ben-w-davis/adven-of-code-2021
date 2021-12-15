@@ -40,3 +40,21 @@ let parseLine (line:string) =
         | None -> parseChar c state
     line
     |> Seq.fold folder initSyntaxState
+
+let findCorruptedLines input =
+    input.Lines
+    |> List.map parseLine
+    |> List.choose (fun x -> x.SyntaxError)
+    |> List.sort
+
+let scoreCorruptedLines input =
+    let scoreChar c =
+        match c with 
+        | ')' -> 3
+        | ']' -> 57
+        | '}' -> 1_197
+        | '>' -> 25_137
+        | _ -> 0
+    findCorruptedLines input
+    |> List.map scoreChar
+    |> List.sum
