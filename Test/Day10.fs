@@ -228,9 +228,9 @@ let ``Complete incomplete line correctly``(line, expected) =
     result |> should equal (expected |> Seq.map id |> List.ofSeq)
 
 [<Theory>]
-[<InlineData("])}>", 294)>]
-[<InlineData("]]}}]}]}>", 995_444)>]
-[<InlineData("}}>}>))))",  1_480_781)>]
+[<InlineData("])}>", 294L)>]
+[<InlineData("]]}}]}]}>", 995_444L)>]
+[<InlineData("}}>}>))))",  1_480_781L)>]
 let ``Score completion``(input, expected) =
     let result = scoreCompletedLine input
     result |> should equal expected
@@ -245,5 +245,14 @@ let ``Find incomplete lines from sample input``() =
 let ``Find autocomplete score from sample input``() =
     let input = readInput sampleInput
     let result = findIncompletedLines input |> chooseMiddleAutocompleteScore
-    result |>  should equal 288957
+    result |>  should equal 288957L
+
+[<Fact>]
+let ``Find autocomplete score from puzzle input``() =
+    let input = readInput puzzleInput
+    let scores = findIncompletedLines input 
+    let result = chooseMiddleAutocompleteScore scores
+
+    //scores |> should equal [11;11;]
+    result |>  should equal 4038824534L
 

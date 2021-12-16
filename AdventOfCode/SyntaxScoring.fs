@@ -73,16 +73,16 @@ let completeIncompleteLine state =
 let scoreCompletedLine input =
     let score c =
         match c with 
-        | ')' -> 1
-        | ']' -> 2
-        | '}' -> 3
-        | '>' ->  4
+        | ')' -> 1L
+        | ']' -> 2L
+        | '}' -> 3L
+        | '>' ->  4L
         | _ -> failwith "it broke"
     let calculate total c =
-        total * 5 + (score c)
+        total * 5L + (score c)
 
     input
-    |> Seq.fold calculate 0
+    |> Seq.fold calculate 0L
 
 
 let findIncompletedLines input =
