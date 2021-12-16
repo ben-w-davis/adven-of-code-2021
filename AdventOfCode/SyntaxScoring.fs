@@ -59,8 +59,7 @@ let scoreCorruptedLines input =
     |> List.map scoreChar
     |> List.sum
 
-let completeIncompleteLine line =
-    let state = parseLine line
+let completeIncompleteLine state =
     let matchIt c =
         match c with
         | '[' -> ']'
@@ -68,9 +67,33 @@ let completeIncompleteLine line =
         | '<' -> '>'
         | '(' -> ')'
         | _ -> failwith "oh no"
-    let temp =
-        state.Stack
-        |> List.map matchIt
-        |> List.toArray
-    new string(temp)
+    state.Stack
+    |> List.map matchIt
 
+let scoreCompletedLine input =
+    let score c =
+        match c with 
+        | ')' -> 1
+        | ']' -> 2
+        | '}' -> 3
+        | '>' ->  4
+        | _ -> failwith "it broke"
+    let calculate total c =
+        total * 5 + (score c)
+
+    input
+    |> Seq.fold calculate 0
+
+
+let findIncompletedLines input =
+    input.Lines
+    |> List.map parseLine
+    |> List.filter (fun x -> x.SyntaxError.IsNone)
+    |> List.map completeIncompleteLine
+    |> List.map scoreCompletedLine
+
+let chooseMiddleAutocompleteScore scores =
+    scores
+    |> List.sort
+    |> List.skip (scores.Length / 2)
+    |> List.head

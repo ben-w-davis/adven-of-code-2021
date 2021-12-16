@@ -218,6 +218,32 @@ let ``Find score for puzzle input``() =
 
 [<Theory>]
 [<InlineData("[({(<(())[]>[[{[]{<()<>>","}}]])})]")>]
+[<InlineData("[(()[<>])]({[<{<<[]>>(", ")}>]})")>]
+[<InlineData("(((({<>}<{<{<>}{[]{[]{}", "}}>}>))))")>]
+[<InlineData("{<[[]]>}<{[{[{[]{()[[[]", "]]}}]}]}>")>]
+[<InlineData("<{([{{}}[<[[[<>{}]]]>[]]", "])}>")>]
 let ``Complete incomplete line correctly``(line, expected) =
-    let result = completeIncompleteLine line
+    let state = parseLine line
+    let result = completeIncompleteLine state
+    result |> should equal (expected |> Seq.map id |> List.ofSeq)
+
+[<Theory>]
+[<InlineData("])}>", 294)>]
+[<InlineData("]]}}]}]}>", 995_444)>]
+[<InlineData("}}>}>))))",  1_480_781)>]
+let ``Score completion``(input, expected) =
+    let result = scoreCompletedLine input
     result |> should equal expected
+
+[<Fact>]
+let ``Find incomplete lines from sample input``() =
+    let input = readInput sampleInput
+    let result = findIncompletedLines input
+    result.Length |> should equal 5
+
+[<Fact>]
+let ``Find autocomplete score from sample input``() =
+    let input = readInput sampleInput
+    let result = findIncompletedLines input |> chooseMiddleAutocompleteScore
+    result |>  should equal 288957
+
