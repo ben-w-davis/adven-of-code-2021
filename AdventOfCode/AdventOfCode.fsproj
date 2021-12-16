@@ -16,6 +16,7 @@
     <Compile Include="SevenSegmentDisplay.fs" />
     <Compile Include="SmokeBasin.fs" />
     <Compile Include="SyntaxScoring.fs" />
+    <Compile Include="DumboOctopus.fs" />
   </ItemGroup>
 
 </Project>
